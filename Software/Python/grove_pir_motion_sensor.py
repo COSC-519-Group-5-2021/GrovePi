@@ -48,6 +48,7 @@ THE SOFTWARE.
 
 import time
 import grovepi
+from sys import argv
 
 # Connect the Grove PIR Motion Sensor to digital port D8
 # NOTE: Some PIR sensors come with the SIG line connected to the yellow wire and some with the SIG line connected to the white wire.
@@ -56,21 +57,38 @@ import grovepi
 # For port 4, this would pin 3 and 4
 
 pir_sensor = 8
+led = 4
 motion=0
 grovepi.pinMode(pir_sensor,"INPUT")
+grovepi.pinMode(led,"OUTPUT")
+# script, duration = argv
+
+print("Use selected duration settings \n \t 1. High \n \t 2. Medium \n \t 3. Low")
+# print(duration)
+
 
 while True:
 	try:
 		# Sense motion, usually human, within the target range
 		motion=grovepi.digitalRead(pir_sensor)
+		#print(motion)
 		if motion==0 or motion==1:	# check if reads were 0 or 1 it can be 255 also because of IO Errors so remove those values
 			if motion==1:
+				grovepi.digitalWrite(led,1)
 				print ('Motion Detected')
 			else:
+				grovepi.digitalWrite(led,0)
 				print ('-')
 
 			# if your hold time is less than this, you might not see as many detections
-		time.sleep(.2)
-
+		# if duration == 1:	
+		time.sleep(1.2)
+		# 	print(duration)
+		# elif duration == 2:
+		# 	time.sleep(.8)
+		# else: # duration == '3':
+		# 	time.sleep(1.2)
+	
 	except IOError:
+		grovepi.digitalWrite(led,0)
 		print ("Error")
