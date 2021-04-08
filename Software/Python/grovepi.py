@@ -215,6 +215,26 @@ def write_i2c_block(block, custom_timing = None):
 			time.sleep(0.003)
 			continue
 
+# Write I2C block for pir sensor to the GrovePi
+def pir_write_i2c_block(block, mode, custom_timing = None):
+	'''
+	Now catches and raises Keyboard Interrupt that the user is responsible to catch.
+	'''
+	counter = 0
+	reg = block[0]
+	data = block[1:]
+	while counter < 3:
+		try:
+			i2c.write_reg_list(reg, data)
+			time.sleep(0.002 + mode)
+			return
+		except KeyboardInterrupt:
+			raise KeyboardInterrupt
+		except:
+			counter += 1
+			time.sleep(0.003)
+			continue
+
 # Read I2C block from the GrovePi
 def read_i2c_block(no_bytes = max_recv_size):
 	'''
@@ -246,6 +266,12 @@ def read_identified_i2c_block(read_command_id, no_bytes):
 # Arduino Digital Read
 def digitalRead(pin):
 	write_i2c_block(dRead_cmd + [pin, unused, unused])
+	data = read_identified_i2c_block( dRead_cmd, no_bytes = 1)[0]
+	return data
+
+#pir digital read
+def pirRead(pin, mode):
+	pir_write_i2c_block(dRead_cmd + [pin, unused, unused], mode)
 	data = read_identified_i2c_block( dRead_cmd, no_bytes = 1)[0]
 	return data
 

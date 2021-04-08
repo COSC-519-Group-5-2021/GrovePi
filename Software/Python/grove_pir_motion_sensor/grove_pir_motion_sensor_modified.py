@@ -48,7 +48,6 @@ THE SOFTWARE.
 
 import time
 import grovepi
-from sys import argv
 
 # Connect the Grove PIR Motion Sensor to digital port D8
 # NOTE: Some PIR sensors come with the SIG line connected to the yellow wire and some with the SIG line connected to the white wire.
@@ -56,51 +55,44 @@ from sys import argv
 # For example, for port D8, if pin 8 does not work below, change it to pin 7, since each port has 2 digital pins.
 # For port 4, this would pin 3 and 4
 
-pir_sensor = 8
-led = 4
-motion=0
-grovepi.pinMode(pir_sensor,"INPUT")
-grovepi.pinMode(led,"OUTPUT")
-# script, duration = argv
 
 # duration = input("Select a duration setting  from [1 - 3] \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
 # print(duration)
+options = {1: ["High", .2], 2: ["Medium", 1.2], 3: ["Low", 2]}
+
 while True:
-	duration = input("Select a duration setting from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
+	duration = input("Use selected duration settings from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
 	if duration.isdigit():
+
 		duration = int(duration)
-		if duration > 3 or duration < 1:
-			print("Invalid number, please select from [1 - 3]")
+		if duration < 1 or duration > 3:
+			print("'{0}' is an invalid number.\n \n".format(duration))
 		else:
+			print("You have selected {0}\n".format(options[duration][0]))
 			break
 	else:
-		print("Not a number, please select from [1 - 3]")
+		print("'{0}' is not a number.\n \n".format(duration))
 
+
+pir_sensor = 8
+#led = 4
+motion=0
+grovepi.pinMode(pir_sensor,"INPUT")
+#grovepi.pinMode(led, "OUTPUT")
+# script, duration = argv
 
 while True:
 	try:
 		# Sense motion, usually human, within the target range
-		motion=grovepi.digitalRead(pir_sensor)
-		#print(motion)
+		motion= grovepi.pirRead(pir_sensor, options[duration][1])
 		if motion==0 or motion==1:	# check if reads were 0 or 1 it can be 255 also because of IO Errors so remove those values
 			if motion==1:
-				grovepi.digitalWrite(led,1)
-				print ('Motion Detected')
+				#grovepi.digitalWrite(led, 1)
+				print ('Motion Detected', time.ctime())
 			else:
-				grovepi.digitalWrite(led,0)
+				#grovepi.digitalWrite(led, 0)
 				print ('-')
 
-			# if your hold time is less than this, you might not see as many detections
-		if duration == 1:	
-		time.sleep(1.2)
-			print(duration)
-		elif duration == 2:
-			time.sleep(.8)
-		elif duration == '3':
-			time.sleep(1.2)
-		else:
-			print("Invalid option")
-	
 	except IOError:
-		grovepi.digitalWrite(led,0)
 		print ("Error")
+
