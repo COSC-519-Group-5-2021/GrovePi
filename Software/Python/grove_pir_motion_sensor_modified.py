@@ -108,3 +108,7 @@ while True:
 		logging.error('Unexpected error: %s', e)
 		raise
 
+	except KeyboardInterrupt:
+		print("\nExiting due to keyboard interrupt\n")
+		logging.info('Exiting due to keyboard interrupt')
+		break
