@@ -46,8 +46,10 @@ THE SOFTWARE.
 # 	non-retriggerable means the sensor will output high for the specified hold time only, then output low until motion is detected again.
 # 	if there is constant motion detected, retriggerable will stay high for the duration and non-retriggerable will oscillate between high/low.
 
+import sys
 import time
 import grovepi
+import logging 
 
 # Connect the Grove PIR Motion Sensor to digital port D8
 # NOTE: Some PIR sensors come with the SIG line connected to the yellow wire and some with the SIG line connected to the white wire.
@@ -59,6 +61,11 @@ import grovepi
 # duration = input("Select a duration setting  from [1 - 3] \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
 # print(duration)
 options = {1: ["High", .2], 2: ["Medium", 1.2], 3: ["Low", 2]}
+
+#Configure the Python logger
+logging.basicConfig(filename='grove_pir_motion_sensor/grove_pir_motion_sensor.log', 
+	filemode='w', format='%(asctime)s - %(levelname)s - %(message)s',
+	level=logging.INFO)
 
 while True:
 	duration = input("Use selected duration settings from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
@@ -81,6 +88,8 @@ grovepi.pinMode(pir_sensor,"INPUT")
 #grovepi.pinMode(led, "OUTPUT")
 # script, duration = argv
 
+logging.info("Motion sensor activated. Sensitivity level is %d out of 3", options[duration][1])
+
 while True:
 	try:
 		# Sense motion, usually human, within the target range
@@ -89,11 +98,13 @@ while True:
 			if motion==1:
 				#grovepi.digitalWrite(led, 1)
 				print ('Motion Detected', time.ctime())
+				logging.info('Motion Detected')
 			else:
 				#grovepi.digitalWrite(led, 0)
 				print ('-')
 
-	except:
-        print("Unexpected error:", sys.exc_info()[0])
-        raise
+	except Exception as e:
+		print("Unexpected error:", e)
+		logging.error('Unexpected error: %s', e)
+		raise
 
