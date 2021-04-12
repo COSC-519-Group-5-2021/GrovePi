@@ -64,7 +64,7 @@ options = {1: ["High", .2], 2: ["Medium", 1.2], 3: ["Low", 2]}
 
 #Configure the Python logger
 logging.basicConfig(filename='grove_pir_motion_sensor/grove_pir_motion_sensor.log', 
-	filemode='w', format='%(asctime)s - %(levelname)s - %(message)s',
+	format='%(asctime)s - %(levelname)s - %(message)s',
 	level=logging.INFO)
 
 while True:
