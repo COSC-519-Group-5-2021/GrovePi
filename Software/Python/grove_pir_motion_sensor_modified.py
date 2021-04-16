@@ -56,7 +56,6 @@ import grovepi
 # For example, for port D8, if pin 8 does not work below, change it to pin 7, since each port has 2 digital pins.
 # For port 4, this would pin 3 and 4
 
-
 pir_sensor = 8
 #led = 4
 motion=0
@@ -80,7 +79,7 @@ def execute(res):
 
 def getSetting():
 	while True:
-		res = input("\nUse selected duration settings from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
+		res = input("\nSelect a sensitivity level from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
 		if res.isdigit():
 			res = int(res)
 			if (1 <= res <= 3):
@@ -96,30 +95,24 @@ def instant():
 	while True:
 		execute(res)
 
-def elapse():
-	elapseTime = int(input("How long would you like the program to run (in minutes): \n"))
+def setTimer():
+	setTimerTime = int(input("How long would you like the program to run (in minutes): \n"))
 	curr = datetime.datetime.now()
-	stop = curr + datetime.timedelta(minutes=elapseTime)
+	stop = curr + datetime.timedelta(minutes=setTimerTime)
 	
 	res = getSetting()
 	while datetime.datetime.now() < stop:
 		execute(res)
 	
-	print("Set time elapsed!")
-	
+	print("Program completed!")
 
-modes = {1: ["Elapsed", elapse], 2: ["Instant", instant]}
+modes = {1: ["Set Timer", setTimer], 2: ["Instant", instant]}
 options = {1: ["High", .2], 2: ["Medium", 1.2], 3: ["Low", 2]}
 
 while True:
-	res = input("Please select a mode to run on: \n \t 1. Elapsed \n \t 2. Instant \n")
-	if res.isdigit():
-		res = int(res)
-		if (1 <= res <= 2):
-			print("The program will run on {0} mode...\n".format(modes[res][0]))
-			modes[res][1]()
-			break
-		else:
-			print("'{0}' is an invalid number.\n \n".format(res))
+	res = input("Do you want to set a timer? Y/n \n")
+	if res.upper() == "Y":
+		print("The program will run with a timer...\n".format(modes[1][0]))
+		modes[1][1]()
 	else:
-		print("'{0}' is not a number.\n \n".format(res))
+		modes[2][1]()
