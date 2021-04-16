@@ -44,9 +44,10 @@ THE SOFTWARE.
 	
 # 	retriggerable means the sensor will continue outputting high if motion was detected before the hold timer expires.
 # 	non-retriggerable means the sensor will output high for the specified hold time only, then output low until motion is detected again.
-# 	if there is constant motion detected, retriggerable will stay high for the duration and non-retriggerable will oscillate between high/low.
+# 	if there is constant motion detected, retriggerable will stay high for the res and non-retriggerable will oscillate between high/low.
 
 import time
+import datetime
 import grovepi
 
 # Connect the Grove PIR Motion Sensor to digital port D8
@@ -55,36 +56,16 @@ import grovepi
 # For example, for port D8, if pin 8 does not work below, change it to pin 7, since each port has 2 digital pins.
 # For port 4, this would pin 3 and 4
 
-
-# duration = input("Select a duration setting  from [1 - 3] \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
-# print(duration)
-options = {1: ["High", .2], 2: ["Medium", 1.2], 3: ["Low", 2]}
-
-while True:
-	duration = input("Use selected duration settings from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
-	if duration.isdigit():
-
-		duration = int(duration)
-		if duration < 1 or duration > 3:
-			print("'{0}' is an invalid number.\n \n".format(duration))
-		else:
-			print("You have selected {0}\n".format(options[duration][0]))
-			break
-	else:
-		print("'{0}' is not a number.\n \n".format(duration))
-
-
 pir_sensor = 8
 #led = 4
 motion=0
 grovepi.pinMode(pir_sensor,"INPUT")
 #grovepi.pinMode(led, "OUTPUT")
-# script, duration = argv
 
-while True:
+def execute(res):
 	try:
 		# Sense motion, usually human, within the target range
-		motion= grovepi.pirRead(pir_sensor, options[duration][1])
+		motion= grovepi.pirRead(pir_sensor, options[res][1])
 		if motion==0 or motion==1:	# check if reads were 0 or 1 it can be 255 also because of IO Errors so remove those values
 			if motion==1:
 				#grovepi.digitalWrite(led, 1)
@@ -92,7 +73,46 @@ while True:
 			else:
 				#grovepi.digitalWrite(led, 0)
 				print ('-')
+	except:
+		print("Unexpected error:", sys.exc_info()[0])
+		raise
 
-	except IOError:
-		print ("Error")
+def getSetting():
+	while True:
+		res = input("\nSelect a sensitivity level from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
+		if res.isdigit():
+			res = int(res)
+			if (1 <= res <= 3):
+				print("The program will run on {0} setting...\n".format(options[res][0]))
+				return res
+			else:
+				print("'{0}' is an invalid number.\n \n".format(res))
+		else:
+			print("'{0}' is not a number.\n \n".format(res))
 
+def instant():
+	res = getSetting()
+	while True:
+		execute(res)
+
+def setTimer():
+	setTimerTime = int(input("How long would you like the program to run (in minutes): \n"))
+	curr = datetime.datetime.now()
+	stop = curr + datetime.timedelta(minutes=setTimerTime)
+	
+	res = getSetting()
+	while datetime.datetime.now() < stop:
+		execute(res)
+	
+	print("Program completed!")
+
+modes = {1: ["Set Timer", setTimer], 2: ["Instant", instant]}
+options = {1: ["High", .2], 2: ["Medium", 1.2], 3: ["Low", 2]}
+
+while True:
+	res = input("Do you want to set a timer? Y/n \n")
+	if res.upper() == "Y":
+		print("The program will run with a timer...\n".format(modes[1][0]))
+		modes[1][1]()
+	else:
+		modes[2][1]()
