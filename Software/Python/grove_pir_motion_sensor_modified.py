@@ -63,7 +63,7 @@ import logging
 options = {1: ["High", .2], 2: ["Medium", 1.2], 3: ["Low", 2]}
 
 #Configure the Python logger
-logging.basicConfig(filename='grove_pir_motion_sensor/grove_pir_motion_sensor.log', 
+logging.basicConfig(filename='Software/Python/grove_pir_motion_sensor/grove_pir_motion_sensor.log', 
 	format='%(asctime)s - %(levelname)s - %(message)s',
 	level=logging.INFO)
 
@@ -88,7 +88,7 @@ grovepi.pinMode(pir_sensor,"INPUT")
 #grovepi.pinMode(led, "OUTPUT")
 # script, duration = argv
 
-logging.info("Motion sensor activated. Sensitivity level is %d out of 3", options[duration][1])
+logging.info("Motion sensor activated. Sensitivity level is %d out of 3", duration)
 
 while True:
 	try:
