@@ -92,8 +92,7 @@ def execute(res):
 		raise
 
 	except KeyboardInterrupt:
-		print("\nExiting due to keyboard interrupt\n")
-		logging.info('Exiting due to keyboard interrupt')
+		keyboardInterrupt()
 		raise
 
 def getSetting():
@@ -126,13 +125,20 @@ def setTimer():
 	print("Program completed!")
 	logging.info('Timer stopped. Exiting.')
 
+def keyboardInterrupt():
+	print("\nexiting due to keyboard interrupt\n")
+	logging.info('Exiting due to keyboard interrupt')
+
 modes = {1: ["Set Timer", setTimer], 2: ["Instant", instant]}
 options = {1: ["High", .2], 2: ["Medium", 1.2], 3: ["Low", 2]}
 
-while True:
+try:
 	res = input("Do you want to set a timer? Y/n \n")
 	if res.upper() == "Y":
 		print("The program will run with a timer...\n".format(modes[1][0]))
 		modes[1][1]()
 	else:
 		modes[2][1]()
+
+except KeyboardInterrupt:
+	keyboardInterrupt()
