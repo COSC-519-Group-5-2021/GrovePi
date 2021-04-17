@@ -46,9 +46,12 @@ THE SOFTWARE.
 # 	non-retriggerable means the sensor will output high for the specified hold time only, then output low until motion is detected again.
 # 	if there is constant motion detected, retriggerable will stay high for the res and non-retriggerable will oscillate between high/low.
 
+import sys
 import time
 import datetime
 import grovepi
+import logging
+import os
 
 # Connect the Grove PIR Motion Sensor to digital port D8
 # NOTE: Some PIR sensors come with the SIG line connected to the yellow wire and some with the SIG line connected to the white wire.
@@ -62,6 +65,15 @@ motion=0
 grovepi.pinMode(pir_sensor,"INPUT")
 #grovepi.pinMode(led, "OUTPUT")
 
+#Get the path from which the script is executing
+script = os.path.realpath(__file__)
+path = os.path.dirname(script)
+
+#Configure the Python logger
+logging.basicConfig(filename= path + '/grove_pir_motion_sensor/grove_pir_motion_sensor.log', 
+	format='%(asctime)s - %(levelname)s - %(message)s',
+	level=logging.INFO)
+
 def execute(res):
 	try:
 		# Sense motion, usually human, within the target range
@@ -70,11 +82,18 @@ def execute(res):
 			if motion==1:
 				#grovepi.digitalWrite(led, 1)
 				print ('Motion Detected', time.ctime())
+				logging.info('Motion Detected')
 			else:
 				#grovepi.digitalWrite(led, 0)
 				print ('-')
-	except:
-		print("Unexpected error:", sys.exc_info()[0])
+	except Exception as e:
+		print("Unexpected error:", e)
+		logging.error('Unexpected error: %s', e)
+		raise
+
+	except KeyboardInterrupt:
+		print("\nExiting due to keyboard interrupt\n")
+		logging.info('Exiting due to keyboard interrupt')
 		raise
 
 def getSetting():
@@ -105,6 +124,7 @@ def setTimer():
 		execute(res)
 	
 	print("Program completed!")
+	logging.info('Timer stopped. Exiting.')
 
 modes = {1: ["Set Timer", setTimer], 2: ["Instant", instant]}
 options = {1: ["High", .2], 2: ["Medium", 1.2], 3: ["Low", 2]}
