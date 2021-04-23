@@ -59,117 +59,86 @@ import os
 # For example, for port D8, if pin 8 does not work below, change it to pin 7, since each port has 2 digital pins.
 # For port 4, this would pin 3 and 4
 
-def execute():
-	res = getSetting()
-	while True:
-		try:
-			# Sense motion, usually human, within the target range
-			motion = grovepi.pirRead(pir_sensor, options[res][1])
-			if (
-				motion == 0 or motion == 1
-			):  # check if reads were 0 or 1 it can be 255 also because of IO Errors so remove those values
-				if motion == 1:
-					# grovepi.digitalWrite(led, 1)
-					print("Motion Detected", time.ctime())
-					logging.info("Motion Detected")
-				else:
-					# grovepi.digitalWrite(led, 0)
-					print("-")
-		except Exception as e:
-			print("Unexpected error:", e)
-			logging.error("Unexpected error: %s", e)
-			raise
+pir_sensor = 8
+#led = 4
+motion=0
+grovepi.pinMode(pir_sensor,"INPUT")
+#grovepi.pinMode(led, "OUTPUT")
 
-		except KeyboardInterrupt:
-			keyboardInterrupt()
-			raise
-	
-	return
+#Get the path from which the script is executing
+script = os.path.realpath(__file__)
+path = os.path.dirname(script)
 
-# run program normally
-# def instant():
-#     while True:
-#         execute()
+#Configure the Python logger
+logging.basicConfig(filename= path + '/grove_pir_motion_sensor/grove_pir_motion_sensor.log', 
+	format='%(asctime)s - %(levelname)s - %(message)s',
+	level=logging.INFO)
 
-# get the sleep duration setting from user.
-def getSetting():
-    while True:
-        res = input(
-            "\nSelect a sensitivity level from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n"
-        )
-        if res.isdigit():
-            res = int(res)
-            if 1 <= res <= 3:
-                print(
-                    "The program will run on {0} setting...\n".format(options[res][0])
-                )
-                return res
-            else:
-                print("{0} is an invalid number.".format(res))
-        else:
-            print("'{0}' is not a number.".format(res))
-
-
-# get time limit of program from user.
-def setTimer():
-    setTimerTime = int(
-        input("How long would you like the program to run (in minutes): \n")
-    )
-    curr = datetime.datetime.now()
-    stop = curr + datetime.timedelta(minutes=setTimerTime)
-
-	# execute program for set time.
-    while datetime.datetime.now() < stop:
-        execute()
-
-    print("Program completed!")
-    logging.info("Timer stopped. Exiting.")
-
-
-def keyboardInterrupt():
-    print("\nexiting due to keyboard interrupt\n")
-    logging.info("Exiting due to keyboard interrupt")
-
-
-def main():
+def execute(res):
 	try:
-		res = input("Do you want to set a timer? Y/n \n")
-		if res.upper() == "Y":
-			print("The program will run with a timer...\n")
-			setTimer()
-		else:
-			execute()
+		# Sense motion, usually human, within the target range
+		motion= grovepi.pirRead(pir_sensor, options[res][1])
+		if motion==0 or motion==1:	# check if reads were 0 or 1 it can be 255 also because of IO Errors so remove those values
+			if motion==1:
+				#grovepi.digitalWrite(led, 1)
+				print ('Motion Detected', time.ctime())
+				logging.info('Motion Detected')
+			else:
+				#grovepi.digitalWrite(led, 0)
+				print ('-')
+	except Exception as e:
+		print("Unexpected error:", e)
+		logging.error('Unexpected error: %s', e)
+		raise
 
 	except KeyboardInterrupt:
 		keyboardInterrupt()
+		raise
 
-	return
+def getSetting():
+	while True:
+		res = input("\nSelect a sensitivity level from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
+		if res.isdigit():
+			res = int(res)
+			if (1 <= res <= 3):
+				print("The program will run on {0} setting...\n".format(options[res][0]))
+				return res
+			else:
+				print("'{0}' is an invalid number.\n \n".format(res))
+		else:
+			print("'{0}' is not a number.\n \n".format(res))
 
-if __name__ == "__main__":
+def instant():
+	res = getSetting()
+	while True:
+		execute(res)
 
-	pir_sensor = 8
-	# led = 4
-	motion = 0
-	grovepi.pinMode(pir_sensor, "INPUT")
-	# grovepi.pinMode(led, "OUTPUT")
+def setTimer():
+	setTimerTime = int(input("How long would you like the program to run (in minutes): \n"))
+	curr = datetime.datetime.now()
+	stop = curr + datetime.timedelta(minutes=setTimerTime)
+	
+	res = getSetting()
+	while datetime.datetime.now() < stop:
+		execute(res)
+	
+	print("Program completed!")
+	logging.info('Timer stopped. Exiting.')
 
-	# modes = {1: ["Set Timer", setTimer], 2: ["Instant", instant]}
-	options = {
-		1: ["High", 0.2], 
-		2: ["Medium", 1.2], 
-		3: ["Low", 2]
-	}
+def keyboardInterrupt():
+	print("\nexiting due to keyboard interrupt\n")
+	logging.info('Exiting due to keyboard interrupt')
 
-	# Get the path from which the script is executing
-	script = os.path.realpath(__file__)
-	path = os.path.dirname(script)
+modes = {1: ["Set Timer", setTimer], 2: ["Instant", instant]}
+options = {1: ["High", .2], 2: ["Medium", 1.2], 3: ["Low", 2]}
 
-	# Configure the Python logger
-	logging.basicConfig(
-		filename=path + "/grove_pir_motion_sensor/grove_pir_motion_sensor.log",
-		format="%(asctime)s - %(levelname)s - %(message)s",
-		level=logging.INFO,
-	)
+try:
+	res = input("Do you want to set a timer? Y/n \n")
+	if res.upper() == "Y":
+		print("The program will run with a timer...\n".format(modes[1][0]))
+		modes[1][1]()
+	else:
+		modes[2][1]()
 
-	# begin process
-	main()
+except KeyboardInterrupt:
+	keyboardInterrupt()
