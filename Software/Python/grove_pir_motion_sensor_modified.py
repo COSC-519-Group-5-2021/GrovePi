@@ -52,6 +52,7 @@ import datetime
 import grovepi
 import logging
 import os
+import argparse
 
 # Connect the Grove PIR Motion Sensor to digital port D8
 # NOTE: Some PIR sensors come with the SIG line connected to the yellow wire and some with the SIG line connected to the white wire.
@@ -114,10 +115,29 @@ def instant():
 		execute(res)
 
 def setTimer():
+	if args.timer:
+		print("Timer:"+str(args.timer)+" Minute(s)")
+		curr = datetime.datetime.now()
+		stop = curr + datetime.timedelta(minutes=args.timer)
+	else:
+		setTimerTime = int(input("How long would you like the program to run (in minutes): \n"))
+		curr = datetime.datetime.now()
+		stop = curr + datetime.timedelta(minutes=setTimerTime)
+		
+	if args.mode:
+		res = args.mode		
+		if (1 <= res <= 3):		
+			print("Mode:"+str(args.mode))
+		else:
+			print("'{0}' is an invalid number.\n \n".format(res))
+			raise
+	else:
+		res = getSetting()
+
 	setTimerTime = int(input("How long would you like the program to run (in minutes): \n"))
 	curr = datetime.datetime.now()
 	stop = curr + datetime.timedelta(minutes=setTimerTime)
-	
+
 	res = getSetting()
 	while datetime.datetime.now() < stop:
 		execute(res)
@@ -129,16 +149,29 @@ def keyboardInterrupt():
 	print("\nexiting due to keyboard interrupt\n")
 	logging.info('Exiting due to keyboard interrupt')
 
+example_text = '''example:
+
+ python3 grove_pir_motion_sensor_modified.py -m 1
+ python3 grove_pir_motion_sensor_modified.py -t 20 -m 1'''
+
+parser = argparse.ArgumentParser(prog='PIR motion sensor', description='Configurable motion sensor',epilog=example_text,formatter_class=argparse.RawDescriptionHelpFormatter)
+parser.add_argument('-t', '--timer', nargs='?', type=int, metavar='timer', help="Set timer")
+parser.add_argument('-m', '--mode', nargs='?', type=int, metavar='mode', help="Sensitivity level from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
+args = parser.parse_args()
+
 modes = {1: ["Set Timer", setTimer], 2: ["Instant", instant]}
 options = {1: ["High", .2], 2: ["Medium", 1.2], 3: ["Low", 2]}
 
 try:
-	res = input("Do you want to set a timer? Y/n \n")
-	if res.upper() == "Y":
-		print("The program will run with a timer...\n".format(modes[1][0]))
+	if args.timer:
 		modes[1][1]()
-	else:
-		modes[2][1]()
+	else:	
+		res = input("Do you want to set a timer? Y/n \n")
+		if res.upper() == "Y":
+			print("The program will run with a timer...\n".format(modes[1][0]))
+			modes[1][1]()
+		else:
+			modes[2][1]()
 
 except KeyboardInterrupt:
 	keyboardInterrupt()
