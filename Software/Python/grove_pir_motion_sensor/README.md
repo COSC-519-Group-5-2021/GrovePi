@@ -33,9 +33,12 @@ Even though you can install the GrovePi package for both versions of it (2.x and
 List of equipments used:
 
 * Seeed Studio. “Raspberry Pi 4 Computer Model B 4GB.” https://www.seeedstudio.com/Raspberry-Pi-4-Computer-Model-B-4GB-p-4077.html
+* [link text itself]
 * Seeed Studio. “GrovePi+.” https://www.seeedstudio.com/GrovePi.html (retrieved March 5, 2021).
 * Seeed Studio. “Grove - PIR Motion Sensor.” https://www.seeedstudio.com/Grove-PIR-Motion-Sensor.html (retrieved March 5, 2021).
 
+
+## Helper Function
 ```
 Helper function -h
 usage: PIR motion sensor [-h] [-t [timer]] [-m [mode]]
@@ -49,7 +52,8 @@ optional arguments:
   -m [mode], --mode [mode]
                         Sensitivity level from [1 - 3]: 1. High 2. Medium 3.
                         Low
-
+```
+```
 example:
 
  python3 grove_pir_motion_sensor_modified.py -m 1
