@@ -31,10 +31,10 @@ Even though you can install the GrovePi package for both versions of it (2.x and
 
 ## Equipments Used
 List of equipments used:
-Seeed Studio. “Raspberry Pi 4 Computer Model B 4GB.” https://www.seeedstudio.com/Raspberry-Pi-4-Computer-Model-B-4GB-p-4077.html (retrieved March 5, 2021).
-Seeed Studio. “GrovePi+.” https://www.seeedstudio.com/GrovePi.html (retrieved March 5, 2021).
-Seeed Studio. “Grove - PIR Motion Sensor.” https://www.seeedstudio.com/Grove-PIR-Motion-Sensor.html (retrieved March 5, 2021).
 
+* Seeed Studio. “Raspberry Pi 4 Computer Model B 4GB.” https://www.seeedstudio.com/Raspberry-Pi-4-Computer-Model-B-4GB-p-4077.html
+* Seeed Studio. “GrovePi+.” https://www.seeedstudio.com/GrovePi.html (retrieved March 5, 2021).
+* Seeed Studio. “Grove - PIR Motion Sensor.” https://www.seeedstudio.com/Grove-PIR-Motion-Sensor.html (retrieved March 5, 2021).
 
 ```
 Helper function -h
@@ -54,7 +54,5 @@ example:
 
  python3 grove_pir_motion_sensor_modified.py -m 1
  python3 grove_pir_motion_sensor_modified.py -t 20 -m 1
- 
- 
  
 ```
