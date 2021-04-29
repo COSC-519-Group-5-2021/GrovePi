@@ -1,3 +1,10 @@
+## Equipment Used
+List of equipment used:
+
+* [Seeed Studio. “Raspberry Pi 4 Computer Model B 4GB.”](https://www.seeedstudio.com/Raspberry-Pi-4-Computer-Model-B-4GB-p-4077.html "https://www.seeedstudio.com/Raspberry-Pi-4-Computer-Model-B-4GB-p-4077.html").
+* [Seeed Studio. “GrovePi+.”](https://www.seeedstudio.com/GrovePi.html "https://www.seeedstudio.com/GrovePi.html").
+* [Seeed Studio. “Grove - PIR Motion Sensor.”](https://www.seeedstudio.com/Grove-PIR-Motion-Sensor.html "https://www.seeedstudio.com/Grove-PIR-Motion-Sensor.html").
+
 ## Installing the GrovePi for Python
 
 This is how the GrovePi python library has to be installed:
@@ -28,14 +35,6 @@ The libraries installed with the GrovePi package are listed in [here](package_mo
 ## Python Consideration
 
 Even though you can install the GrovePi package for both versions of it (2.x and 3.x), some libraries other than the main one (`grovepi.py`) can only be used with Python3. Therefore, it's just better to use Python 3 by-default, instead of relying on an older version of Python which will anyway get retired in the very near future.
-
-## Equipments Used
-List of equipments used:
-
-* [Seeed Studio. “Raspberry Pi 4 Computer Model B 4GB.”](https://www.seeedstudio.com/Raspberry-Pi-4-Computer-Model-B-4GB-p-4077.html "https://www.seeedstudio.com/Raspberry-Pi-4-Computer-Model-B-4GB-p-4077.html").
-* [Seeed Studio. “GrovePi+.”](https://www.seeedstudio.com/GrovePi.html "https://www.seeedstudio.com/GrovePi.html").
-* [Seeed Studio. “Grove - PIR Motion Sensor.”](https://www.seeedstudio.com/Grove-PIR-Motion-Sensor.html "https://www.seeedstudio.com/Grove-PIR-Motion-Sensor.html").
-
 
 ## Helper Function
 ```
