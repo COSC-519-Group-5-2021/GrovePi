@@ -32,8 +32,7 @@ Even though you can install the GrovePi package for both versions of it (2.x and
 ## Equipments Used
 List of equipments used:
 
-* Seeed Studio. “Raspberry Pi 4 Computer Model B 4GB.” https://www.seeedstudio.com/Raspberry-Pi-4-Computer-Model-B-4GB-p-4077.html
-* [link text itself]
+* [Seeed Studio. “Raspberry Pi 4 Computer Model B 4GB.”] (https://www.seeedstudio.com/Raspberry-Pi-4-Computer-Model-B-4GB-p-4077.html)
 * Seeed Studio. “GrovePi+.” https://www.seeedstudio.com/GrovePi.html (retrieved March 5, 2021).
 * Seeed Studio. “Grove - PIR Motion Sensor.” https://www.seeedstudio.com/Grove-PIR-Motion-Sensor.html (retrieved March 5, 2021).
 
