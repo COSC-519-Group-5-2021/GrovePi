@@ -49,8 +49,7 @@ optional arguments:
   -t [timer], --timer [timer]
                         Set timer
   -m [mode], --mode [mode]
-                        Sensitivity level from [1 - 3]: 1. High 2. Medium 3.
-                        Low
+                        Sensitivity level from [1 - 3]: 1. High 2. Medium 3. Low
 ```
 ```
 example:
