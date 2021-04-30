@@ -230,7 +230,8 @@ def pir_write_i2c_block(block, mode, custom_timing = None):
 			return
 		except KeyboardInterrupt:
 			raise KeyboardInterrupt
-		except:
+		except Exception as e:
+			print("Unexpected error:", e)
 			counter += 1
 			time.sleep(0.003)
 			continue
