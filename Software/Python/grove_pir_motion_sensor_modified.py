@@ -77,22 +77,35 @@ def execute(mode):
 		print("Unexpected error:", e)
 		logging.error('Unexpected error: %s', e)
 		raise
-
-def getSetting():
-	while True:
-		mode = input("\nSelect a sensitivity level from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
-		if mode.isdigit():
-			mode = int(mode)
-			if (1 <= mode <= 3):
-				print("The program will run on {0} setting...\n".format(options[mode][0]))
-				return mode
-			else:
-				print("'{0}' is an invalid number.\n \n".format(mode))
+		
+def getSetting(arg):
+	if arg:
+		setting = arg		
+		if (1 <= setting <= 3):		
+			print("Setting:"+str(args.setting))
+			return setting
 		else:
-			print("'{0}' is not a number.\n \n".format(mode))
+			print("'{0}' is an invalid number.\n \n".format(mode))
+			parser.print_help(sys.stderr)
+			sys.exit(1)
+	else:
+		while True:
+			setting = input("\nSelect a sensitivity level from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
+			if setting.isdigit():
+				setting = int(setting)
+				if (1 <= setting <= 3):
+					print("The program will run on {0} setting...\n".format(options[setting][0]))
+					return setting
+				else:
+					print("'{0}' is an invalid number.\n \n".format(setting))
+			else:
+				print("'{0}' is not a number.\n \n".format(setting))
 
 def instant():
-	mode = getSetting()
+	if args.setting:
+		mode = getSetting(args.setting)
+	else:
+		mode = getSetting(0)
 	while True:
 		execute(mode)
 
@@ -104,16 +117,10 @@ def setTimer():
 	else:
 		time = int(input("How long would you like the program to run (in minutes): \n"))
 		
-	if args.mode:
-		mode = args.mode		
-		if (1 <= mode <= 3):		
-			print("Mode:"+str(args.mode))
-		else:
-			print("'{0}' is an invalid number.\n \n".format(mode))
-			parser.print_help(sys.stderr)
-			sys.exit(1)
+	if args.setting:
+		mode = getSetting(args.setting)
 	else:
-		mode = getSetting()
+		mode = getSetting(0)
 
 	stop = curr + datetime.timedelta(minutes=time)
 	while datetime.datetime.now() < stop:
@@ -171,7 +178,7 @@ if __name__ == "__main__":
 
 	parser = argparse.ArgumentParser(prog='PIR motion sensor', description='Configurable motion sensor',epilog=example_text,formatter_class=argparse.RawDescriptionHelpFormatter)
 	parser.add_argument('-t', '--timer', nargs='?', type=int, metavar='timer', help="Set timer")
-	parser.add_argument('-m', '--mode', nargs='?', type=int, metavar='mode', help="Sensitivity level from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
+	parser.add_argument('-s', '--setting', nargs='?', type=int, metavar='mode', help="Sensitivity level from [1 - 3]: \n \t 1. High \n \t 2. Medium \n \t 3. Low \n")
 	parser.add_argument('-l', '--led', nargs='?', type=int, metavar='led', help="Set LED: \n 0. Off \n \t 1. On \n ")
 	args = parser.parse_args()
 
