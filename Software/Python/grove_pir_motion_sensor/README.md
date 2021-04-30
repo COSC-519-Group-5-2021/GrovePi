@@ -52,9 +52,16 @@ optional arguments:
                         Sensitivity level from [1 - 3]: 1. High 2. Medium 3. Low
 ```
 ```
-example:
+Example:
 
  python3 grove_pir_motion_sensor_modified.py -m 1
  python3 grove_pir_motion_sensor_modified.py -t 20 -m 1
  
+Result:
+ -
+ -
+ Motion Detected Fri Apr 30 18:22:03 2021
+ Motion Detected Fri Apr 30 18:22:05 2021
+ -
+ -
 ```
