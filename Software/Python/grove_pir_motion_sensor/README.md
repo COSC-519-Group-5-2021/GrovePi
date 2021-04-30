@@ -54,8 +54,8 @@ optional arguments:
 ```
 Example:
 
- python3 grove_pir_motion_sensor_modified.py -m 1
- python3 grove_pir_motion_sensor_modified.py -t 20 -m 1
+ python3 grove_pir_motion_sensor_modified.py -s 1
+ python3 grove_pir_motion_sensor_modified.py -t 20 -s 1
  
 Result:
  -
