@@ -48,6 +48,7 @@ THE SOFTWARE.
 
 import sys
 import time
+from time import sleep
 import datetime
 import grovepi
 import logging
@@ -111,6 +112,7 @@ def instant():
 
 def setTimer():
 	curr = datetime.datetime.now()
+	sleep(1)
 	if args.timer:
 		print("Timer:"+str(args.timer)+" Minute(s)")
 		time = args.timer
